@@ -1,0 +1,2 @@
+21-03-2024
+Able to parse the Simple Maps city data. Also able to display the detected countries and view the cities in that country

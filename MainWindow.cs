@@ -1,6 +1,7 @@
 using Microsoft.VisualBasic.FileIO;
 using System.Globalization;
 using System.Linq;
+using System.Runtime;
 using System.Windows.Forms;
 
 namespace AverageCityFinder
@@ -17,6 +18,7 @@ namespace AverageCityFinder
         {
             InitializeComponent();
 
+            SetUpCitiesLivedGridView();
             LoadCityData();
             SplitCitiesByCountry();
 
@@ -105,6 +107,23 @@ namespace AverageCityFinder
         }
 
 
+        private void SetUpCitiesLivedGridView()
+        {
+            //citiesLivedGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            //citiesLivedGridView.Columns.Add("CityName", "City Name");
+            //citiesLivedGridView.Columns.Add("TimeLived", "Time Lived (Months)");
+
+            // Make the grid view editable
+            //citiesLivedGridView.ReadOnly = false;
+            //citiesLivedGridView.AllowUserToAddRows = false;
+
+            // Optionally, make specific columns read-only if needed
+            //citiesLivedGridView.Columns["CityName"].ReadOnly = true;
+
+            citiesLivedGridView.AutoGenerateColumns = true;
+            citiesLivedGridView.DataSource = citiesLivedList;
+        }
+
 
         #region Country Selection
 
@@ -170,31 +189,67 @@ namespace AverageCityFinder
             {
                 if (city.CityName.ToLower().StartsWith(searchText))
                 {
-                    cityListBox.Items.Add(city.CityName);
+                    cityListBox.Items.Add(city);
                 }
             }
         }
 
+        #endregion
 
-        private void cityListBox_SelectedIndexChanged(object sender, EventArgs e)
+
+        #region Cities Lived Management
+
+        List<CityData> citiesLivedList = new List<CityData>();
+
+
+        private void addCityBtn_Click(object sender, EventArgs e)
         {
-            // Get the city and add it to the current list of chosen cities
+            if (cityListBox.SelectedIndex != -1)
+            {
+                CityData selectedCity = (CityData)cityListBox.SelectedItem;
+
+                citiesLivedList.Add(selectedCity);
+                citiesLivedGridView.DataSource = null;
+                citiesLivedGridView.DataSource = citiesLivedList;
+                citiesLivedGridView.Refresh();
+            }
         }
 
         #endregion
 
+
+        private void calculateAverageLocationBtn_Click(object sender, EventArgs e)
+        {
+            double weightedSumLat = 0;
+            double weightedSumLon = 0;
+
+            // Normalise the time lived in each city by the longest time spent
+            double maxTimeLived = citiesLivedList.Max(x => x.TimeLivedMonths);
+
+            for (int i = 0; i < citiesLivedList.Count; i++)
+            {
+                double cityWeighting = (citiesLivedList[i].TimeLivedMonths / maxTimeLived);
+
+                weightedSumLat += citiesLivedList[i].Latitude * cityWeighting;
+                weightedSumLon += citiesLivedList[i].Longitude * cityWeighting;
+            }
+
+            double averageLatitude = weightedSumLat / citiesLivedList.Count;
+            double averageLongitude = weightedSumLon / citiesLivedList.Count;
+        }
     }
 
 
 
     public class CityData
     {
-        public string CityName;
-        public double Latitude;
-        public double Longitude;
-        public string CountryName;
-        public double Population;
-        public long CityID;
+        public string CityName { get; set; }
+        public double Latitude {get; set;}
+        public double Longitude {get; set;}
+        public string CountryName {get; set;}
+        public double Population {get; set;}
+        public long CityID {get; set;}
+        public double TimeLivedMonths {get; set;}
 
 
         // This is so the listbox will display the city name on the UI

@@ -60,6 +60,7 @@
             cityListBox.Name = "cityListBox";
             cityListBox.Size = new Size(198, 154);
             cityListBox.TabIndex = 2;
+            cityListBox.SelectedIndexChanged += cityListBox_SelectedIndexChanged;
             // 
             // citySearchBox
             // 

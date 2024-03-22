@@ -151,7 +151,7 @@ namespace AverageCityFinder
             cityListBox.Items.Clear();
             for (int i = 0; i < citiesInSelectedCountry.Count; i++)
             {
-                cityListBox.Items.Add(citiesInSelectedCountry[i].CityName);
+                cityListBox.Items.Add(citiesInSelectedCountry[i]);
             }
         }
 
@@ -175,8 +175,13 @@ namespace AverageCityFinder
             }
         }
 
-        #endregion
 
+        private void cityListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Get the city and add it to the current list of chosen cities
+        }
+
+        #endregion
 
     }
 
@@ -190,5 +195,12 @@ namespace AverageCityFinder
         public string CountryName;
         public double Population;
         public long CityID;
+
+
+        // This is so the listbox will display the city name on the UI
+        public override string ToString()
+        {
+            return CityName; 
+        }
     }
 }

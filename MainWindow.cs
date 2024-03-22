@@ -28,6 +28,8 @@ namespace AverageCityFinder
 
             countryListBox.Items.Clear();
             countryListBox.Items.AddRange(citiesByCountryList.Keys.ToArray());
+
+            citiesLivedList.ListChanged += CitiesLivedList_ListChanged;
         }
 
 
@@ -226,8 +228,6 @@ namespace AverageCityFinder
             }
         }
 
-        #endregion
-
 
         private void calculateAverageLocationBtn_Click(object sender, EventArgs e)
         {
@@ -259,6 +259,37 @@ namespace AverageCityFinder
             useInfoTextBox.AppendText($"\n Your average Latitude is {Math.Round(averageLatitude,3)}°");
             useInfoTextBox.AppendText($"\n Your average Longitude is {Math.Round(averageLongitude,3)}°");
         }
+
+
+        private void CitiesLivedList_ListChanged(object sender, ListChangedEventArgs e)
+        {
+            UpdateMapCities(citiesLivedList.ToList());
+        }
+
+        #endregion
+
+
+        #region Map Updating
+
+        private void UpdateMapCities(List<CityData> cities)
+        {
+            var markersOverlay = new GMap.NET.WindowsForms.GMapOverlay("markers");
+
+            for (int i = 0; i < cities.Count; i++)
+            {
+                var marker = new GMap.NET.WindowsForms.Markers.GMarkerGoogle( new GMap.NET.PointLatLng(cities[i].Latitude, cities[i].Longitude),
+                                                                              GMap.NET.WindowsForms.Markers.GMarkerGoogleType.red_dot);
+            
+                markersOverlay.Markers.Add(marker);
+            }
+
+            gmapWindow.Overlays.Clear();
+            gmapWindow.Overlays.Add(markersOverlay);
+            gmapWindow.Invalidate();
+        }
+
+        #endregion
+
     }
 
 

@@ -7,8 +7,10 @@ namespace AverageCityFinder
 {
     public partial class MainWindow : Form
     {
-        List<CityData> cityDataList;
-        SortedDictionary<string, List<CityData>> countryCityData;
+        List<CityData> citiesList;
+
+        SortedDictionary<string, List<CityData>> citiesByCountryList;
+        List<CityData> citiesInSelectedCountry;
 
 
         public MainWindow()
@@ -19,13 +21,13 @@ namespace AverageCityFinder
             SplitCitiesByCountry();
 
             countryListBox.Items.Clear();
-            countryListBox.Items.AddRange(countryCityData.Keys.ToArray());
+            countryListBox.Items.AddRange(citiesByCountryList.Keys.ToArray());
         }
 
 
         private void LoadCityData()
         {
-            cityDataList = new List<CityData>();
+            citiesList = new List<CityData>();
 
             string cityDataPath = Path.Combine(Directory.GetCurrentDirectory(), "worldCities.csv");
 
@@ -70,7 +72,7 @@ namespace AverageCityFinder
 
 
 
-                    cityDataList.Add(cityData);
+                    citiesList.Add(cityData);
                 }
 
             }
@@ -81,7 +83,7 @@ namespace AverageCityFinder
         {
             var unorderedDictionary = new Dictionary<string, List<CityData>>();
 
-            foreach (var city in cityDataList)
+            foreach (var city in citiesList)
             {
                 if (unorderedDictionary.ContainsKey(city.CountryName))
                 {
@@ -93,20 +95,31 @@ namespace AverageCityFinder
                 }
             }
 
-            countryCityData = new SortedDictionary<string, List<CityData>>(unorderedDictionary);
+            // Order each of the country city lists alphabetically
+            foreach (var kvPair in unorderedDictionary)
+            {
+                unorderedDictionary[kvPair.Key] = kvPair.Value.OrderBy(city => city.CityName).ToList();
+            }
+
+            citiesByCountryList = new SortedDictionary<string, List<CityData>>(unorderedDictionary);
         }
 
 
 
         #region Country Selection
 
+        /// <summary>
+        /// This takes search text in the countrySearchBox textbox, find countries in the citiesByCountryList
+        /// that match the search and populates the conutryListBox with those countries
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void countrySearchBox_TextChanged(object sender, EventArgs e)
         {
             countryListBox.Items.Clear();
             var searchText = countrySearchBox.Text.ToLower();
 
-
-            foreach (var kvPair in countryCityData)
+            foreach (var kvPair in citiesByCountryList)
             {
                 if (kvPair.Key.ToLower().StartsWith(searchText))
                 {
@@ -116,6 +129,11 @@ namespace AverageCityFinder
         }
 
 
+        /// <summary>
+        /// When the user clicks on a country, we populate the cityListBox with the cities in that country
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void countryListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (countryListBox.SelectedIndex == -1)
@@ -124,20 +142,42 @@ namespace AverageCityFinder
             }
 
             // Get the list of cities in the selected country
-            if (!countryCityData.TryGetValue(countryListBox.SelectedItem.ToString(), out List<CityData> cityList))
+            if (!citiesByCountryList.TryGetValue(countryListBox.SelectedItem.ToString(), out citiesInSelectedCountry))
             {
                 return;
             }
 
-            cityListBox.Items.Clear();
 
-            for (int i = 0; i < cityList.Count; i++)
+            cityListBox.Items.Clear();
+            for (int i = 0; i < citiesInSelectedCountry.Count; i++)
             {
-                cityListBox.Items.Add(cityList[i].CityName);
+                cityListBox.Items.Add(citiesInSelectedCountry[i].CityName);
             }
         }
 
         #endregion
+
+
+        #region City Selection
+
+
+        private void citySearchBox_TextChanged(object sender, EventArgs e)
+        {
+            cityListBox.Items.Clear();
+            var searchText = citySearchBox.Text.ToLower();
+
+            foreach (var city in citiesInSelectedCountry)
+            {
+                if (city.CityName.ToLower().StartsWith(searchText))
+                {
+                    cityListBox.Items.Add(city.CityName);
+                }
+            }
+        }
+
+        #endregion
+
+
     }
 
 

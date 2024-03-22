@@ -67,6 +67,7 @@
             citySearchBox.Name = "citySearchBox";
             citySearchBox.Size = new Size(198, 23);
             citySearchBox.TabIndex = 3;
+            citySearchBox.TextChanged += citySearchBox_TextChanged;
             // 
             // MainWindow
             // 

@@ -1,4 +1,5 @@
 using Microsoft.VisualBasic.FileIO;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Runtime;
@@ -109,19 +110,10 @@ namespace AverageCityFinder
 
         private void SetUpCitiesLivedGridView()
         {
-            //citiesLivedGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            //citiesLivedGridView.Columns.Add("CityName", "City Name");
-            //citiesLivedGridView.Columns.Add("TimeLived", "Time Lived (Months)");
-
-            // Make the grid view editable
-            //citiesLivedGridView.ReadOnly = false;
-            //citiesLivedGridView.AllowUserToAddRows = false;
-
-            // Optionally, make specific columns read-only if needed
-            //citiesLivedGridView.Columns["CityName"].ReadOnly = true;
-
+            citiesLivedGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             citiesLivedGridView.AutoGenerateColumns = true;
             citiesLivedGridView.DataSource = citiesLivedList;
+            citiesLivedGridView.Columns["CityName"].ReadOnly = true;
         }
 
 
@@ -199,7 +191,7 @@ namespace AverageCityFinder
 
         #region Cities Lived Management
 
-        List<CityData> citiesLivedList = new List<CityData>();
+        BindingList<CityData> citiesLivedList = new BindingList<CityData>();
 
 
         private void addCityBtn_Click(object sender, EventArgs e)
@@ -209,9 +201,6 @@ namespace AverageCityFinder
                 CityData selectedCity = (CityData)cityListBox.SelectedItem;
 
                 citiesLivedList.Add(selectedCity);
-                citiesLivedGridView.DataSource = null;
-                citiesLivedGridView.DataSource = citiesLivedList;
-                citiesLivedGridView.Refresh();
             }
         }
 
@@ -244,11 +233,11 @@ namespace AverageCityFinder
     public class CityData
     {
         public string CityName { get; set; }
-        public double Latitude {get; set;}
-        public double Longitude {get; set;}
-        public string CountryName {get; set;}
-        public double Population {get; set;}
-        public long CityID {get; set;}
+        public double Latitude;
+        public double Longitude;
+        public string CountryName;
+        public double Population;
+        public long CityID;
         public double TimeLivedMonths {get; set;}
 
 

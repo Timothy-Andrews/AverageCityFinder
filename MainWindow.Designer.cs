@@ -88,7 +88,7 @@
             // 
             addCityBtn.Location = new Point(216, 183);
             addCityBtn.Name = "addCityBtn";
-            addCityBtn.Size = new Size(80, 23);
+            addCityBtn.Size = new Size(198, 23);
             addCityBtn.TabIndex = 5;
             addCityBtn.Text = "Add City";
             addCityBtn.UseVisualStyleBackColor = true;
@@ -96,9 +96,10 @@
             // 
             // calculateAverageLocationBtn
             // 
+            calculateAverageLocationBtn.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             calculateAverageLocationBtn.Location = new Point(12, 416);
             calculateAverageLocationBtn.Name = "calculateAverageLocationBtn";
-            calculateAverageLocationBtn.Size = new Size(402, 29);
+            calculateAverageLocationBtn.Size = new Size(402, 49);
             calculateAverageLocationBtn.TabIndex = 6;
             calculateAverageLocationBtn.Text = "Calculate Average";
             calculateAverageLocationBtn.UseVisualStyleBackColor = true;
@@ -106,9 +107,9 @@
             // 
             // useInfoTextBox
             // 
-            useInfoTextBox.Location = new Point(12, 451);
+            useInfoTextBox.Location = new Point(12, 471);
             useInfoTextBox.Name = "useInfoTextBox";
-            useInfoTextBox.Size = new Size(402, 128);
+            useInfoTextBox.Size = new Size(402, 108);
             useInfoTextBox.TabIndex = 7;
             useInfoTextBox.Text = "";
             // 

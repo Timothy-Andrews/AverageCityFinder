@@ -256,6 +256,12 @@ namespace AverageCityFinder
                 sumWeights += cityWeighting;
             }
 
+            if (sumWeights == 0 || double.IsNaN(sumWeights))
+            {
+                useInfoTextBox.AppendText($"It doesn't look like you've put time spent for any of your locations\n");
+                return;
+            }
+
             double averageLatitude = sumWeightedLat / sumWeights;
             double averageLongitude = sumWeightedLon / sumWeights;
 

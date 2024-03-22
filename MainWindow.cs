@@ -209,8 +209,14 @@ namespace AverageCityFinder
 
         private void calculateAverageLocationBtn_Click(object sender, EventArgs e)
         {
-            double weightedSumLat = 0;
-            double weightedSumLon = 0;
+            if (citiesLivedList == null || citiesLivedList.Count == 0)
+            {
+                return;
+            }
+
+            double sumWeightedLat = 0;
+            double sumWeightedLon = 0;
+            double sumWeights = 0;
 
             // Normalise the time lived in each city by the longest time spent
             double maxTimeLived = citiesLivedList.Max(x => x.TimeLivedMonths);
@@ -219,12 +225,17 @@ namespace AverageCityFinder
             {
                 double cityWeighting = (citiesLivedList[i].TimeLivedMonths / maxTimeLived);
 
-                weightedSumLat += citiesLivedList[i].Latitude * cityWeighting;
-                weightedSumLon += citiesLivedList[i].Longitude * cityWeighting;
+                sumWeightedLat += citiesLivedList[i].Latitude * cityWeighting;
+                sumWeightedLon += citiesLivedList[i].Longitude * cityWeighting;
+
+                sumWeights += cityWeighting;
             }
 
-            double averageLatitude = weightedSumLat / citiesLivedList.Count;
-            double averageLongitude = weightedSumLon / citiesLivedList.Count;
+            double averageLatitude = sumWeightedLat / sumWeights;
+            double averageLongitude = sumWeightedLon / sumWeights;
+
+            useInfoTextBox.AppendText($"\n Your average Latitude is {Math.Round(averageLatitude,3)}°");
+            useInfoTextBox.AppendText($"\n Your average Longitude is {Math.Round(averageLongitude,3)}°");
         }
     }
 

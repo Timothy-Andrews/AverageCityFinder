@@ -35,6 +35,7 @@
             citiesLivedGridView = new DataGridView();
             addCityBtn = new Button();
             calculateAverageLocationBtn = new Button();
+            useInfoTextBox = new RichTextBox();
             ((System.ComponentModel.ISupportInitialize)citiesLivedGridView).BeginInit();
             SuspendLayout();
             // 
@@ -102,11 +103,20 @@
             calculateAverageLocationBtn.UseVisualStyleBackColor = true;
             calculateAverageLocationBtn.Click += calculateAverageLocationBtn_Click;
             // 
+            // useInfoTextBox
+            // 
+            useInfoTextBox.Location = new Point(420, 24);
+            useInfoTextBox.Name = "useInfoTextBox";
+            useInfoTextBox.Size = new Size(253, 88);
+            useInfoTextBox.TabIndex = 7;
+            useInfoTextBox.Text = "";
+            // 
             // MainWindow
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 477);
+            ClientSize = new Size(800, 478);
+            Controls.Add(useInfoTextBox);
             Controls.Add(calculateAverageLocationBtn);
             Controls.Add(addCityBtn);
             Controls.Add(citiesLivedGridView);
@@ -130,5 +140,6 @@
         private DataGridView citiesLivedGridView;
         private Button addCityBtn;
         private Button calculateAverageLocationBtn;
+        private RichTextBox useInfoTextBox;
     }
 }

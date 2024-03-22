@@ -232,6 +232,8 @@ namespace AverageCityFinder
 
         private void calculateAverageLocationBtn_Click(object sender, EventArgs e)
         {
+            useInfoTextBox.Clear();
+
             if (citiesLivedList == null || citiesLivedList.Count == 0)
             {
                 return;
@@ -265,7 +267,52 @@ namespace AverageCityFinder
             averageCityLived.Latitude = averageLatitude;
             averageCityLived.AverageCalculated = true;
 
+            CalculateClosestCitiesToAverage();
             UpdateMapCities();
+        }
+
+
+        private void CalculateClosestCitiesToAverage()
+        {
+            double closestTotalCity = double.MaxValue;
+            double closestLatCity = double.MaxValue;
+            double closestLonCity = double.MaxValue;
+
+            var avLat = averageCityLived.Latitude;
+            var avLon = averageCityLived.Longitude;
+
+            for (int i = 0; i < citiesList.Count; i++)
+            {
+                var totDist = Math.Sqrt(Math.Pow(avLat - citiesList[i].Latitude, 2) + Math.Pow(avLon - citiesList[i].Longitude, 2));
+
+                if ( totDist < closestTotalCity )
+                {
+                    closestTotalCity = totDist;
+                    averageCityLived.ClosestCity = citiesList[i];
+                }
+
+                var latDist = Math.Abs(avLat - citiesList[i].Latitude);
+
+                if (latDist < closestLatCity)
+                {
+                    closestLatCity = latDist;
+                    averageCityLived.ClosestLatitudeCity = citiesList[i];
+                }
+
+                var lonDist = Math.Abs(avLon - citiesList[i].Longitude);
+
+                if (lonDist < closestLonCity)
+                {
+                    closestLonCity = lonDist;
+                    averageCityLived.ClosestLongitudeCity = citiesList[i];
+                }
+            }
+
+
+            useInfoTextBox.AppendText($"The closest city to you is {averageCityLived.ClosestCity.CityName}, {averageCityLived.ClosestCity.CountryName}\n");
+            useInfoTextBox.AppendText($"The closest city to your latitude is {averageCityLived.ClosestLatitudeCity.CityName}, {averageCityLived.ClosestLatitudeCity.CountryName}\n");
+            useInfoTextBox.AppendText($"The closest city to your longitude is {averageCityLived.ClosestLongitudeCity.CityName}, {averageCityLived.ClosestLongitudeCity.CountryName}\n");
+
         }
 
 
@@ -327,6 +374,19 @@ namespace AverageCityFinder
 
                 routesOverlay.Routes.Add(latRoute);
                 routesOverlay.Routes.Add(lonRoute);
+
+
+                var closestLatCityMarker = new GMap.NET.WindowsForms.Markers.GMarkerGoogle(new GMap.NET.PointLatLng(averageCityLived.ClosestLatitudeCity.Latitude, averageCityLived.ClosestLatitudeCity.Longitude),
+                                                                            GMap.NET.WindowsForms.Markers.GMarkerGoogleType.yellow_dot);
+                var closestLonCityMarker = new GMap.NET.WindowsForms.Markers.GMarkerGoogle(new GMap.NET.PointLatLng(averageCityLived.ClosestLongitudeCity.Latitude, averageCityLived.ClosestLongitudeCity.Longitude),
+                                                                            GMap.NET.WindowsForms.Markers.GMarkerGoogleType.green_dot);
+                var closestCityMarker = new GMap.NET.WindowsForms.Markers.GMarkerGoogle(new GMap.NET.PointLatLng(averageCityLived.ClosestCity.Latitude, averageCityLived.ClosestCity.Longitude),
+                                                                           GMap.NET.WindowsForms.Markers.GMarkerGoogleType.blue_dot);
+
+
+                markersOverlay.Markers.Add(closestLatCityMarker);
+                markersOverlay.Markers.Add(closestLonCityMarker);
+                markersOverlay.Markers.Add(closestCityMarker);
             }
 
             gmapWindow.Overlays.Add(routesOverlay);

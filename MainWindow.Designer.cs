@@ -88,7 +88,7 @@
             // 
             addCityBtn.Location = new Point(216, 183);
             addCityBtn.Name = "addCityBtn";
-            addCityBtn.Size = new Size(198, 23);
+            addCityBtn.Size = new Size(80, 23);
             addCityBtn.TabIndex = 5;
             addCityBtn.Text = "Add City";
             addCityBtn.UseVisualStyleBackColor = true;
@@ -98,7 +98,7 @@
             // 
             calculateAverageLocationBtn.Location = new Point(12, 416);
             calculateAverageLocationBtn.Name = "calculateAverageLocationBtn";
-            calculateAverageLocationBtn.Size = new Size(143, 49);
+            calculateAverageLocationBtn.Size = new Size(402, 29);
             calculateAverageLocationBtn.TabIndex = 6;
             calculateAverageLocationBtn.Text = "Calculate Average";
             calculateAverageLocationBtn.UseVisualStyleBackColor = true;
@@ -106,9 +106,9 @@
             // 
             // useInfoTextBox
             // 
-            useInfoTextBox.Location = new Point(161, 416);
+            useInfoTextBox.Location = new Point(12, 451);
             useInfoTextBox.Name = "useInfoTextBox";
-            useInfoTextBox.Size = new Size(253, 88);
+            useInfoTextBox.Size = new Size(402, 128);
             useInfoTextBox.TabIndex = 7;
             useInfoTextBox.Text = "";
             // 
@@ -135,7 +135,7 @@
             gmapWindow.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
             gmapWindow.SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225);
             gmapWindow.ShowTileGridLines = false;
-            gmapWindow.Size = new Size(694, 480);
+            gmapWindow.Size = new Size(694, 555);
             gmapWindow.TabIndex = 8;
             gmapWindow.Zoom = 0D;
             // 
@@ -143,7 +143,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1126, 515);
+            ClientSize = new Size(1126, 590);
             Controls.Add(gmapWindow);
             Controls.Add(useInfoTextBox);
             Controls.Add(calculateAverageLocationBtn);

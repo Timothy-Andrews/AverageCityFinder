@@ -216,6 +216,7 @@ namespace AverageCityFinder
         #region Cities Lived Management
 
         BindingList<CityData> citiesLivedList = new BindingList<CityData>();
+        AverageCity averageCityLived = new AverageCity();
 
 
         private void addCityBtn_Click(object sender, EventArgs e)
@@ -256,14 +257,21 @@ namespace AverageCityFinder
             double averageLatitude = sumWeightedLat / sumWeights;
             double averageLongitude = sumWeightedLon / sumWeights;
 
-            useInfoTextBox.AppendText($"\n Your average Latitude is {Math.Round(averageLatitude,3)}°");
-            useInfoTextBox.AppendText($"\n Your average Longitude is {Math.Round(averageLongitude,3)}°");
+            useInfoTextBox.AppendText($"Your average Latitude is {Math.Round(averageLatitude,3)}°\n");
+            useInfoTextBox.AppendText($"Your average Longitude is {Math.Round(averageLongitude,3)}°\n");
+
+
+            averageCityLived.Longitude = averageLongitude;
+            averageCityLived.Latitude = averageLatitude;
+            averageCityLived.AverageCalculated = true;
+
+            UpdateMapCities();
         }
 
 
         private void CitiesLivedList_ListChanged(object sender, ListChangedEventArgs e)
         {
-            UpdateMapCities(citiesLivedList.ToList());
+            UpdateMapCities();
         }
 
         #endregion
@@ -271,19 +279,57 @@ namespace AverageCityFinder
 
         #region Map Updating
 
-        private void UpdateMapCities(List<CityData> cities)
+        private void UpdateMapCities()
         {
-            var markersOverlay = new GMap.NET.WindowsForms.GMapOverlay("markers");
+            gmapWindow.Overlays.Clear();
 
-            for (int i = 0; i < cities.Count; i++)
+            var markersOverlay = new GMapOverlay("markers");
+            var routesOverlay = new GMapOverlay("routes");
+
+
+            for (int i = 0; i < citiesLivedList.Count; i++)
             {
-                var marker = new GMap.NET.WindowsForms.Markers.GMarkerGoogle( new GMap.NET.PointLatLng(cities[i].Latitude, cities[i].Longitude),
+                var marker = new GMap.NET.WindowsForms.Markers.GMarkerGoogle( new GMap.NET.PointLatLng(citiesLivedList[i].Latitude, citiesLivedList[i].Longitude),
                                                                               GMap.NET.WindowsForms.Markers.GMarkerGoogleType.red_dot);
             
                 markersOverlay.Markers.Add(marker);
             }
 
-            gmapWindow.Overlays.Clear();
+            if (averageCityLived.AverageCalculated)
+            {
+                var marker = new GMap.NET.WindowsForms.Markers.GMarkerGoogle(new GMap.NET.PointLatLng(averageCityLived.Latitude, averageCityLived.Longitude),
+                                                                             GMap.NET.WindowsForms.Markers.GMarkerGoogleType.purple_dot);
+
+                markersOverlay.Markers.Add(marker);
+
+
+                // Plot the lines of latitude and longitude for the average city
+                List<PointLatLng> averageLatPoints = new List<PointLatLng>
+                {
+                    new PointLatLng(averageCityLived.Latitude, -180),
+                    new PointLatLng(averageCityLived.Latitude, 180),
+                };
+                List<PointLatLng> averageLonPoints = new List<PointLatLng>
+                {
+                    new PointLatLng(-90, averageCityLived.Longitude),
+                    new PointLatLng(90, averageCityLived.Longitude),
+                };
+
+                GMapRoute latRoute = new GMapRoute(averageLatPoints, "AverageLatitude")
+                {
+                    Stroke = new Pen(Color.Black, 2),
+                };
+                GMapRoute lonRoute = new GMapRoute(averageLonPoints, "AverageLatitude")
+                {
+                    Stroke = new Pen(Color.Black, 2),
+                };
+
+
+                routesOverlay.Routes.Add(latRoute);
+                routesOverlay.Routes.Add(lonRoute);
+            }
+
+            gmapWindow.Overlays.Add(routesOverlay);
             gmapWindow.Overlays.Add(markersOverlay);
             gmapWindow.Invalidate();
         }
@@ -310,5 +356,18 @@ namespace AverageCityFinder
         {
             return CityName; 
         }
+    }
+
+
+    public class AverageCity
+    {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public bool AverageCalculated { get; set; } = false;
+
+        public CityData ClosestCity { get; set; }
+        public CityData ClosestLatitudeCity { get; set; }
+        public CityData ClosestLongitudeCity { get; set; }
+
     }
 }

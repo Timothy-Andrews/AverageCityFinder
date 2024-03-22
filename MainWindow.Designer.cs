@@ -114,6 +114,7 @@
             // 
             // gmapWindow
             // 
+            gmapWindow.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             gmapWindow.Bearing = 0F;
             gmapWindow.CanDragMap = true;
             gmapWindow.EmptyTileColor = Color.Navy;

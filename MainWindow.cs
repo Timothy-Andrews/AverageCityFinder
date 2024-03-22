@@ -1,3 +1,5 @@
+using GMap.NET;
+using GMap.NET.WindowsForms;
 using Microsoft.VisualBasic.FileIO;
 using System.ComponentModel;
 using System.Globalization;
@@ -20,6 +22,7 @@ namespace AverageCityFinder
             InitializeComponent();
 
             SetUpCitiesLivedGridView();
+            SetUpGMapWindow();
             LoadCityData();
             SplitCitiesByCountry();
 
@@ -114,6 +117,25 @@ namespace AverageCityFinder
             citiesLivedGridView.AutoGenerateColumns = true;
             citiesLivedGridView.DataSource = citiesLivedList;
             citiesLivedGridView.Columns["CityName"].ReadOnly = true;
+        }
+
+
+        private void SetUpGMapWindow()
+        {
+            gmapWindow.MapProvider = GMap.NET.MapProviders.GoogleMapProvider.Instance;
+            GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerOnly;
+
+            // Set your initial position.
+            gmapWindow.Position = new GMap.NET.PointLatLng(0, 0); // Use your desired initial latitude and longitude
+
+            // Optional: Set zoom level, enable map dragging, and other properties.
+            gmapWindow.MinZoom = 1;                                                                            // whole world zoom
+            gmapWindow.MaxZoom = 20;
+            gmapWindow.Zoom = 1;
+            gmapWindow.ShowCenter = false;
+            gmapWindow.DragButton = MouseButtons.Left; // Use the left mouse button to drag map
+            gmapWindow.MouseWheelZoomEnabled = true;
+            gmapWindow.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionWithoutCenter; // Zooming will center around the mouse position
         }
 
 

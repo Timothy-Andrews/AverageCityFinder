@@ -36,6 +36,7 @@
             addCityBtn = new Button();
             calculateAverageLocationBtn = new Button();
             useInfoTextBox = new RichTextBox();
+            gmapWindow = new GMap.NET.WindowsForms.GMapControl();
             ((System.ComponentModel.ISupportInitialize)citiesLivedGridView).BeginInit();
             SuspendLayout();
             // 
@@ -105,17 +106,44 @@
             // 
             // useInfoTextBox
             // 
-            useInfoTextBox.Location = new Point(420, 24);
+            useInfoTextBox.Location = new Point(161, 416);
             useInfoTextBox.Name = "useInfoTextBox";
             useInfoTextBox.Size = new Size(253, 88);
             useInfoTextBox.TabIndex = 7;
             useInfoTextBox.Text = "";
             // 
+            // gmapWindow
+            // 
+            gmapWindow.Bearing = 0F;
+            gmapWindow.CanDragMap = true;
+            gmapWindow.EmptyTileColor = Color.Navy;
+            gmapWindow.GrayScaleMode = false;
+            gmapWindow.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            gmapWindow.LevelsKeepInMemory = 5;
+            gmapWindow.Location = new Point(420, 24);
+            gmapWindow.MarkersEnabled = true;
+            gmapWindow.MaxZoom = 2;
+            gmapWindow.MinZoom = 2;
+            gmapWindow.MouseWheelZoomEnabled = true;
+            gmapWindow.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            gmapWindow.Name = "gmapWindow";
+            gmapWindow.NegativeMode = false;
+            gmapWindow.PolygonsEnabled = true;
+            gmapWindow.RetryLoadTile = 0;
+            gmapWindow.RoutesEnabled = true;
+            gmapWindow.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
+            gmapWindow.SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225);
+            gmapWindow.ShowTileGridLines = false;
+            gmapWindow.Size = new Size(694, 480);
+            gmapWindow.TabIndex = 8;
+            gmapWindow.Zoom = 0D;
+            // 
             // MainWindow
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 478);
+            ClientSize = new Size(1126, 515);
+            Controls.Add(gmapWindow);
             Controls.Add(useInfoTextBox);
             Controls.Add(calculateAverageLocationBtn);
             Controls.Add(addCityBtn);
@@ -141,5 +169,6 @@
         private Button addCityBtn;
         private Button calculateAverageLocationBtn;
         private RichTextBox useInfoTextBox;
+        private GMap.NET.WindowsForms.GMapControl gmapWindow;
     }
 }
